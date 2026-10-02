@@ -1,0 +1,3 @@
+#include "lin_node.h"
+void lin_node_init(lin_node_t*n){if(!n)return;n->state=LIN_NODE_IDLE;n->rx_errors=0;n->timeout_errors=0;n->fault_injection=0;signal_db_init(&n->signals);}
+void lin_node_on_frame(lin_node_t*n,uint8_t id,const uint8_t*d,uint8_t len){if(!n)return;if(!d||len==0U){n->rx_errors++;n->state=LIN_NODE_ERROR;return;}n->state=LIN_NODE_RESPONSE;signal_db_decode(id,d,len,&n->signals);n->state=LIN_NODE_IDLE;}
